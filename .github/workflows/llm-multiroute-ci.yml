@@ -4,13 +4,13 @@ on:
   push:
     branches: [main, master]
     paths:
-      - 'llm-multiroute/**'
-      - '.github/workflows/llm-multiroute-ci.yml'
+      - "llm-multiroute/**"
+      - ".github/workflows/llm-multiroute-ci.yml"
   pull_request:
     branches: [main, master]
     paths:
-      - 'llm-multiroute/**'
-      - '.github/workflows/llm-multiroute-ci.yml'
+      - "llm-multiroute/**"
+      - ".github/workflows/llm-multiroute-ci.yml"
   workflow_dispatch:
 
 defaults:
@@ -27,8 +27,8 @@ jobs:
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-          cache: 'pip'
+          python-version: "3.12"
+          cache: "pip"
           cache-dependency-path: llm-multiroute/requirements.txt
 
       - name: Install dependencies
@@ -50,8 +50,8 @@ jobs:
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-          cache: 'pip'
+          python-version: "3.12"
+          cache: "pip"
           cache-dependency-path: llm-multiroute/requirements.txt
 
       - name: Install dependencies
@@ -76,7 +76,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: darryl1975/llm-multiroute
+          images: wjunhong/llm-multiroute
           tags: |
             type=sha
             type=ref,event=branch
@@ -89,7 +89,7 @@ jobs:
         with:
           context: llm-multiroute
           load: true
-          tags: darryl1975/llm-multiroute:scan
+          tags: wjunhong/llm-multiroute:scan
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -98,17 +98,17 @@ jobs:
         env:
           TRIVY_DISABLE_VEX_NOTICE: "true"
         with:
-          image-ref: darryl1975/llm-multiroute:scan
-          format: 'table'
-          exit-code: '1'
-          severity: 'CRITICAL,HIGH'
+          image-ref: wjunhong/llm-multiroute:scan
+          format: "table"
+          exit-code: "1"
+          severity: "CRITICAL,HIGH"
           trivyignores: .trivyignore
 
       - name: Login to Docker Hub
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
         with:
-          username: darryl1975
+          username: wjunhong
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Push Docker image
